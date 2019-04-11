@@ -14,6 +14,9 @@
 #include "irods_re_plugin.hpp"
 #include "irods_error.hpp"
 
+#include <cstring>
+#include <algorithm>
+
 #define RE_ERROR(cond) if(cond) { goto error; }
 
 extern int GlobalAllRuleExecFlag;
@@ -528,8 +531,20 @@ Res *parseAndComputeExpression( char *expr, Env *env, ruleExecInfo_t *rei, int r
     }
     else if ( getNodeType( node ) == N_ERROR ) {
         generateErrMsg( "error: syntax error", NODE_EXPR_POS( node ), node->base, buf );
+        const char * truncate_msg = " ... ";
+        auto * pNull = std::find(buf,buf+ERR_MSG_LEN,'\0');
+        rodsLog(LOG_NOTICE, "nul search gave ending value offset : %d ",pNull - buf);
+        if (pNull==buf+ERR_MSG_LEN) {
+            std::strcpy(buf + ERR_MSG_LEN - 1 - std::strlen(truncate_msg), truncate_msg);
+            rodsLog( LOG_NOTICE, "truncation happening .... in %s ",__func__);
+        }
+        buf[ERR_MSG_LEN - 1] = '\0';
+        //rodsLog( LOG_NOTICE, "'%s' is buf in <<<<<<<<<  %s  >>>>>>>>>",buf , __func__ );
+          rodsLog( LOG_NOTICE, "'%s'ABCDEFG in <<<<<<<<<  %s  >>>>>>>>>",buf , __func__ );
+        /* 4311 */
         addRErrorMsg( errmsg, RE_PARSER_ERROR, buf );
         res = newErrorRes( r, RE_PARSER_ERROR );
+          rodsLog( LOG_NOTICE, "'%s'ABCDEFG in <<<<<<<<<  %s  >>>>>>>>>",buf , __func__ );
         RETURN;
     }
     else {
