@@ -2236,6 +2236,7 @@ msiObjStat( msParam_t *inpParam1, msParam_t *outParam, ruleExecInfo_t *rei ) {
     rei->status = rsObjStat( rsComm, myDataObjInp, &rodsObjStatOut );
 
     if ( rei->status >= 0 ) {
+        clearMsParam(outParam , 0);
         fillMsParam( outParam, NULL, RodsObjStat_MS_T, rodsObjStatOut, NULL );
     }
     else {

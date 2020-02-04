@@ -68,6 +68,7 @@ namespace irods{
                 *(boost::any_cast<std::string *>(itr)) = std::string(reinterpret_cast<char*>( t->inOutStruct) );
             }
         } else if (t->type) {
+            clearMsParam( boost::any_cast<msParam_t*>(itr), 0);
             replMsParam(t, boost::any_cast<msParam_t*>(itr));
         } else {
             return ERROR(-1, "type was null, cannot convert type");
