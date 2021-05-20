@@ -16,6 +16,9 @@
 
 #include "get_hier_from_leaf_id.h"
 
+#include "irods_at_scope_exit.hpp"
+#include <unistd.h>
+
 #include <fstream>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/convenience.hpp>
@@ -840,6 +843,15 @@ clearCollSqlResult( collSqlResult_t *collSqlResult ) {
 
 int
 clearDataObjSqlResult( dataObjSqlResult_t *dataObjSqlResult ) {
+//DWM
+    rodsLog(LOG_NOTICE, "DWM %s enter in PID %ld:", __PRETTY_FUNCTION__, long(getpid()));
+
+    irods::at_scope_exit<std::function<void()>> my_exit {
+       [] {
+           rodsLog(LOG_NOTICE, "DWM %s exit  in PID %ld:", __PRETTY_FUNCTION__, long(getpid()));
+       }
+    };
+
     if ( dataObjSqlResult == NULL ) {
         return USER__NULL_INPUT_ERR;
     }
