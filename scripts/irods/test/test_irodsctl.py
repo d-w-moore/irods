@@ -17,6 +17,7 @@ from .. import paths
 from ..controller import IrodsController
 from ..configuration import IrodsConfig
 
+'''
 class Test_Irodsctl(unittest.TestCase):
     def test_re_shm_creation(self):
         if 'irods_rule_engine_plugin-irods_rule_language' in IrodsConfig().configured_rule_engine_plugins:
@@ -69,3 +70,4 @@ def start_irods_server(env=None):
 def restart_irods_server(env=None):
     stop_irods_server()
     start_irods_server(env=env)
+'''
