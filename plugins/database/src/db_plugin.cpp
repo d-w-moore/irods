@@ -1054,6 +1054,9 @@ icatScramble( char *pw ) {
 */
 int decodePw( rsComm_t *rsComm, const char *in, char *out ) {
     int status;
+    struct A{ ~A(){ rodsLog (LOG_NOTICE, "in function %s: done -------",__FUNCTION__); }} A_;
+
+    rodsLog (LOG_NOTICE, "in function %s: in  = [%s]", __FUNCTION__, in);
     char *cp;
     char password[MAX_PASSWORD_LEN];
     char upassword[MAX_PASSWORD_LEN + 10];
@@ -1082,14 +1085,17 @@ int decodePw( rsComm_t *rsComm, const char *in, char *out ) {
         return status;
     }
 
+    rodsLog (LOG_NOTICE, "in function %s: -password  = [%s]", __FUNCTION__,  password);
     icatDescramble( password );
 
     obfDecodeByKeyV2( in, password, prevChalSig, upassword );
 
     pwLen1 = strlen( upassword );
 
+    rodsLog (LOG_NOTICE, "in function %s: +password  = [%s]", __FUNCTION__,  password);
     memset( password, 0, MAX_PASSWORD_LEN );
 
+    rodsLog (LOG_NOTICE, "in function %s: upassword  = [%s]", __FUNCTION__, upassword);
     cp = strstr( upassword, rand );
     if ( cp != NULL ) {
         *cp = '\0';
@@ -1107,7 +1113,7 @@ int decodePw( rsComm_t *rsComm, const char *in, char *out ) {
     }
     strcpy( out, upassword );
     memset( upassword, 0, MAX_PASSWORD_LEN );
-
+    rodsLog (LOG_NOTICE, "in function %s: out = [%s]", __FUNCTION__, out);
     return 0;
 }
 
@@ -7854,6 +7860,7 @@ irods::error db_mod_user_op(
         char userIdStr[MAX_NAME_LEN];
         i = decodePw( _ctx.comm(), _new_value, decoded );
         if (i == CAT_PASSWORD_ENCODING_ERROR || strlen(decoded) > MAX_PASSWORD_LEN - 8) {
+            rodsLog(LOG_NOTICE, "in func [%s] decoded = [%s]",__FUNCTION__,decoded);
             // Password encoding error occurs when the password is not of the correct
             // length.  Pop the existing CAT_PASSWORD_ENCODING_ERROR and return PASSWORD_EXCEEDS_MAX_SIZE
             // error.  See issue 6764.
