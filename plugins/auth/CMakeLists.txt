@@ -10,6 +10,7 @@ set(
   IRODS_AUTH_PLUGINS
   native
   pam_password
+  null
 )
 
 foreach(plugin IN LISTS IRODS_AUTH_PLUGINS)
