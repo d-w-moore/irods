@@ -2221,7 +2221,7 @@ int initServerMain(rsComm_t *svrComm,
     // The delay server will launch just before we enter the server's main loop.
     ix::cron::cron_builder delay_server;
     delay_server
-        .interval(5)
+        .interval(999999) // DWM
         .task([enable_test_mode, write_to_stdout] {
             migrate_delay_server(enable_test_mode, write_to_stdout);
         });
