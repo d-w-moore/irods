@@ -212,12 +212,10 @@ namespace irods
 
         json null_auth_agent_response(rsComm_t& comm, const json& req)
         {
-            json resp{req};
             irods_auth::throw_if_request_message_is_missing_key(
                 req, {"zone_name", "user_name"}
             );
 
-#if 0
             // need to do NoLogin because it could get into inf loop for cross zone auth
             rodsServerHost_t *rodsServerHost;
             auto zone_name = req.at("zone_name").get<std::string>();
@@ -226,6 +224,9 @@ namespace irods
             if ( status < 0 ) {
                 THROW(status, "Connecting to rcat host failed.");
             }
+
+            /** null
+             *
 
             char* response = static_cast<char*>(malloc(RESPONSE_LEN + 1));
             std::memset(response, 0, RESPONSE_LEN + 1);
@@ -248,16 +249,29 @@ namespace irods
             authCheckInp.challenge = _rsAuthRequestGetChallenge();
             authCheckInp.response = response;
 
+              */
+
             const std::string username = fmt::format(
                     "{}#{}", req.at("user_name").get_ref<const std::string&>(), zone_name);
-            authCheckInp.username = const_cast<char*>(username.data());
+            // null auth - not needed - DWM // authCheckInp.username = const_cast<char*>(username.data());
 
             authCheckOut_t* authCheckOut = nullptr;
+
             if (LOCAL_HOST == rodsServerHost->localFlag) {
+                /** null 
+                 *
                 status = rsAuthCheck(&comm, &authCheckInp, &authCheckOut);
+                */
+                status = 0;
+                authCheckOut = (authCheckOut_t*) calloc(1,sizeof(authCheckOut_t));
             }
             else {
+                /** null
+                 *
                 status = rcAuthCheck(rodsServerHost->conn, &authCheckInp, &authCheckOut);
+                 */
+                status = 0;
+                authCheckOut = (authCheckOut_t*) calloc(1,sizeof(authCheckOut_t));
                 /* not likely we need this connection again */
                 rcDisconnect(rodsServerHost->conn);
                 rodsServerHost->conn = nullptr;
@@ -269,6 +283,7 @@ namespace irods
 
             json resp{req};
 
+#if 0
             // Do we need to consider remote zones here?
             if (LOCAL_HOST != rodsServerHost->localFlag) {
                 if (!authCheckOut->serverResponse) {
@@ -318,6 +333,7 @@ namespace irods
                     }
                 }
             }
+#endif // 0
 
             /* Set the clientUser zone if it is null. */
             if ('\0' == comm.clientUser.rodsZone[0]) {
@@ -330,6 +346,10 @@ namespace irods
                     strncpy(comm.clientUser.rodsZone, tmpZoneInfo->zoneName, NAME_LEN);
                 }
             }
+
+//////////   "special" username checking just for experimental null auth plugin - DWM
+//
+            authCheckOut->clientPrivLevel = authCheckOut->privLevel = (username == "rods" ? LOCAL_PRIV_USER_AUTH:LOCAL_USER_AUTH);
 
             /* have to modify privLevel if the icat is a foreign icat because
              * a local user in a foreign zone is not a local user in this zone
@@ -383,10 +403,10 @@ namespace irods
             irods::throw_on_insufficient_privilege_for_proxy_user(comm, authCheckOut->privLevel);
 
             log_auth::debug(
-                    "rsAuthResponse set proxy authFlag to {}, client authFlag to {}, user:{} proxy:{} client:{}",
+                    "rsAuthResponse set proxy authFlag to {}, client authFlag to {}, user:<?> proxy:{} client:{}",
                     authCheckOut->privLevel,
                     authCheckOut->clientPrivLevel,
-                    authCheckInp.username,
+                    //authCheckInp.username,
                     comm.proxyUser.userName,
                     comm.clientUser.userName);
 
@@ -405,7 +425,6 @@ namespace irods
                 }
                 free( authCheckOut );
             }
-#endif //0
             return resp;
         } // null_auth_agent_response
 
