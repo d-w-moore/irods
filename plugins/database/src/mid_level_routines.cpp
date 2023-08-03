@@ -18,6 +18,7 @@
 #include "irods/irods_virtual_path.hpp"
 #include "irods/rodsErrorTable.h"
 #include "irods/rcMisc.h"
+#include "irods/irods_logger.hpp"
 
 #include <vector>
 #include <string>
@@ -28,6 +29,8 @@
 #define AUDIT_COMMENT_MAX_SIZE       1000
 
 extern int logSQL_CML;
+
+using log_db = irods::experimental::log::database;
 
 int checkObjIdByTicket( const char *dataId, const char *accessLevel,
                         const char *ticketStr, const char *ticketHost,
@@ -1543,8 +1546,18 @@ int checkObjIdByTicket( const char *dataId, const char *accessLevel,
                               "update R_TICKET_MAIN set write_file_count=? where ticket_id=?",
                               icss );
                 if ( status != 0 ) {
+                    if (const auto ec = cmlExecuteNoAnswerSql("rollback", icss); ec < 0) {
+                        log_db::error("{}: Rollback error [{}].", __func__, ec);
+                    }
+
                     return status;
                 }
+
+                if (const auto ec = cmlExecuteNoAnswerSql("commit", icss); ec < 0) {
+                    log_db::error("{}: Commit error [{}].", __func__, ec);
+                    return ec;
+                }
+
 #ifndef ORA_ICAT
                 /* do a commit on disconnect if needed */
                 cllCheckPending( "", 2, icss->databaseType );
@@ -1573,8 +1586,18 @@ int checkObjIdByTicket( const char *dataId, const char *accessLevel,
             status =  cmlExecuteNoAnswerSql(
                           "update R_TICKET_MAIN set uses_count=? where ticket_id=?", icss );
             if ( status != 0 ) {
+                if (const auto ec = cmlExecuteNoAnswerSql("rollback", icss); ec < 0) {
+                    log_db::error("{}: Rollback error [{}].", __func__, ec);
+                }
+
                 return status;
             }
+
+            if (const auto ec = cmlExecuteNoAnswerSql("commit", icss); ec < 0) {
+                log_db::error("{}: Commit error [{}].", __func__, ec);
+                return ec;
+            }
+
 #ifndef ORA_ICAT
             /* do a commit on disconnect if needed*/
             cllCheckPending( "", 2, icss->databaseType );
@@ -1669,8 +1692,18 @@ cmlTicketUpdateWriteBytes( const char *ticketStr,
     status =  cmlExecuteNoAnswerSql(
                   "update R_TICKET_MAIN set write_byte_count=? where ticket_id=?", icss );
     if ( status != 0 ) {
+        if (const auto ec = cmlExecuteNoAnswerSql("rollback", icss); ec < 0) {
+            log_db::error("{}: Rollback error [{}].", __func__, ec);
+        }
+
         return status;
     }
+
+    if (const auto ec = cmlExecuteNoAnswerSql("commit", icss); ec < 0) {
+        log_db::error("{}: Commit error [{}].", __func__, ec);
+        return ec;
+    }
+
 #ifndef ORA_ICAT
     /* do a commit on disconnect if needed */
     cllCheckPending( "", 2, icss->databaseType );
