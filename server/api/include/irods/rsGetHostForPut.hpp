@@ -5,5 +5,6 @@
 #include "irods/dataObjInpOut.h"
 
 int rsGetHostForPut( rsComm_t *rsComm, dataObjInp_t *dataObjInp, char **outHost );
+int rs_get_rescinfo_for_put( rsComm_t *rsComm, dataObjInp_t *dataObjInp, char **response );
 
 #endif
