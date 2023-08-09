@@ -8,6 +8,7 @@ add_library(
   "${CMAKE_CURRENT_SOURCE_DIR}/src/rs_atomic_apply_metadata_operations.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/rs_check_auth_credentials.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/rs_get_rescinfo_for_put.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/rs_get_rescinfo_for_get.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/rs_data_object_finalize.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/rs_get_delay_rule_info.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/rs_get_file_descriptor_info.cpp"
