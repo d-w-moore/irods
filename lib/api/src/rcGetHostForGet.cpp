@@ -47,7 +47,9 @@ rcGetHostForGet( rcComm_t *conn, dataObjInp_t *dataObjInp,
     return status;
 }
 
-auto rc_get_rescinfo_for_get(RcComm* _comm, const DataObjInp* _message, char** _response) -> int
+auto rc_get_rescinfo_for_get(RcComm* _comm, 
+        //const - ?
+        DataObjInp* _message, char** _response) -> int
 {
         if (!_message || !_response) {
                 return SYS_INVALID_INPUT_PARAM;

@@ -8,7 +8,8 @@
 #include "irods/irods_logger.hpp"
 #include "irods/rodsErrorTable.h"
 
-#include "irods/getHostForPut.h"
+#include "irods/getHostForPut.h" // for definition of macro: THIS_ADDRESS
+#include "irods/getHostForGet.h"
 #include "irods/rodsLog.h"
 #include "irods/rsGlobalExtern.hpp"
 #include "irods/rcGlobalExtern.h"
@@ -19,7 +20,7 @@
 #include "irods/collection.hpp"
 #include "irods/specColl.hpp"
 #include "irods/miscServerFunct.hpp"
-#include "irods/rsGetHostForPut.hpp"
+#include "irods/rsGetHostForGet.hpp"
 
 // =-=-=-=-=-=-=-
 #include "irods/irods_resource_backport.hpp"
