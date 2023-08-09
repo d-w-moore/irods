@@ -6,5 +6,6 @@
 #include "irods/getHostForGet.h"
 
 int rsGetHostForGet( rsComm_t *rsComm, dataObjInp_t *dataObjInp, char **outHost );
+int rs_get_rescinfo_for_get( rsComm_t *rsComm, dataObjInp_t *dataObjInp, char **response );
 
 #endif
