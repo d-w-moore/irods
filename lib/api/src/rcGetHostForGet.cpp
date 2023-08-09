@@ -46,3 +46,19 @@ rcGetHostForGet( rcComm_t *conn, dataObjInp_t *dataObjInp,
 
     return status;
 }
+
+auto rc_get_rescinfo_for_get(RcComm* _comm, const DataObjInp* _message, char** _response) -> int
+{
+        if (!_message || !_response) {
+                return SYS_INVALID_INPUT_PARAM;
+        }
+
+        return procApiRequest(_comm,
+                              GET_RESCINFO_FOR_GET_AN,
+                              _message, // NOLINT(cppcoreguidelines-pro-type-const-cast)
+                              nullptr,
+                              reinterpret_cast<void**>(_response), // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
+                              nullptr);
+} // rc_get_rescinfo_for_get
+
+

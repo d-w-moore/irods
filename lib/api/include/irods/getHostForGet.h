@@ -16,5 +16,6 @@ typedef struct {
 extern "C"
 #endif
 int rcGetHostForGet( rcComm_t *conn, dataObjInp_t *dataObjInp, char **outHost );
+int rc_get_rescinfo_for_get( rcComm_t *conn, dataObjInp_t *dataObjInp, char **outHost );
 
 #endif
