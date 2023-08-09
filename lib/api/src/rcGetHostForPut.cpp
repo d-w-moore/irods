@@ -49,3 +49,21 @@ rcGetHostForPut( rcComm_t *conn, dataObjInp_t *dataObjInp,
 
     return status;
 }
+
+// move to its own file?
+auto rc_get_rescinfo_for_put(rcComm_t* _comm,
+                    //const                               // DWM - was const in api plugin, but now conforming to above.
+                             dataObjInp_t *_message,
+                             char** _response) -> int
+{
+    if (!_message || !_response) {
+        return SYS_INVALID_INPUT_PARAM;
+    }
+
+    return procApiRequest(_comm,
+                          GET_RESCINFO_FOR_PUT_AN,
+                          _message, // NOLINT(cppcoreguidelines-pro-type-const-cast)
+                          nullptr,
+                          reinterpret_cast<void**>(_response), // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast
+                          nullptr);
+} // rc_get_rescinfo_for_put

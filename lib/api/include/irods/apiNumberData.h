@@ -160,4 +160,7 @@ API_NUMBER(SERVER_REPORT_AN,                        10204)
 API_NUMBER(ZONE_REPORT_AN,                          10205)
 API_NUMBER(CLIENT_HINTS_AN,                         10215)
 
+API_NUMBER(GET_RESCINFO_FOR_PUT_AN,                 10220)
+API_NUMBER(GET_RESCINFO_FOR_GET_AN,                 10221)
+
 // clang-format on
