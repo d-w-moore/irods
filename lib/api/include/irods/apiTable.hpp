@@ -236,6 +236,7 @@
 #define RS_GET_HIER_FROM_LEAF_ID       NULLPTR_FOR_CLIENT_TABLE(rsGetHierFromLeafId)
 #define RS_GET_HOST_FOR_GET            NULLPTR_FOR_CLIENT_TABLE(rsGetHostForGet)
 #define RS_GET_HOST_FOR_PUT            NULLPTR_FOR_CLIENT_TABLE(rsGetHostForPut)
+#define RS_GET_RESCINFO_FOR_PUT        NULLPTR_FOR_CLIENT_TABLE(rs_get_rescinfo_for_put)
 #define RS_GET_LIMITED_PASSWORD        NULLPTR_FOR_CLIENT_TABLE(rsGetLimitedPassword)
 #define RS_GET_MISC_SVR_INFO           NULLPTR_FOR_CLIENT_TABLE(rsGetMiscSvrInfo)
 #define RS_GET_REMOTE_ZONE_RESC        NULLPTR_FOR_CLIENT_TABLE(rsGetRemoteZoneResc)
@@ -1259,6 +1260,13 @@ static irods::apidef_t client_api_table_inp[] = {
         boost::any(std::function<int(rsComm_t*, checkAuthCredsInp_t*, int**)>(RS_CHECK_AUTH_CREDENTIALS)),
         "api_check_auth_credentials", irods::clearInStruct_noop, irods::clearOutStruct_noop,
         (funcPtr) CALL_CHECK_AUTH_CREDENTIALS_INOUT
+    },
+    {
+        GET_RESCINFO_FOR_PUT_AN, RODS_API_VERSION, REMOTE_USER_AUTH, REMOTE_USER_AUTH,
+        "DataObjInp_PI", 0, "STR_PI", 0,
+        boost::any(std::function<int(rsComm_t*,dataObjInp_t*,char**)>(RS_GET_RESCINFO_FOR_PUT)),
+        "api_get_rescinfo_for_put", clearDataObjInp, irods::clearOutStruct_noop,
+        (funcPtr)CALL_DATAOBJINP_CHAROUT
     },
     // clang-format on
 }; // _api_table_inp
