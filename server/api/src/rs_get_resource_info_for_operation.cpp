@@ -37,7 +37,7 @@ int rs_get_resource_info_for_operation(rsComm_t* _rsComm, dataObjInp_t* _dataObj
     if (allowed_ops.end() == found_operation) {
         return SYS_INVALID_INPUT_PARAM;
     }
-    if (getValByKey(&_dataObjInp->condInput, RESC_HIER_STR_KW) == nullptr) {
+    if (const char * hier_cstr = getValByKey(&_dataObjInp->condInput, RESC_HIER_STR_KW); hier_cstr == nullptr) {
         try {
             auto result = irods::resolve_resource_hierarchy(*found_operation, _rsComm, *_dataObjInp);
             hier = std::get<std::string>(result);
@@ -47,6 +47,9 @@ int rs_get_resource_info_for_operation(rsComm_t* _rsComm, dataObjInp_t* _dataObj
             return e.code();
         }
     } // if keyword
+    else {
+        hier = hier_cstr;
+    }
 
     // extract the host location from the resource hierarchy
     irods::error ret = irods::get_loc_for_hier_string(hier, location);
