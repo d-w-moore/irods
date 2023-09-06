@@ -1275,7 +1275,7 @@ static irods::apidef_t client_api_table_inp[] = {
         "DataObjInp_PI", 0, "STR_PI", 0,
         boost::any(std::function<int(rsComm_t*,dataObjInp_t*,char**)>(RS_GET_RESOURCE_INFO_FOR_OPERATION)),
         "api_get_resource_info_for_operation", clearDataObjInp, irods::clearOutStruct_noop,
-        (funcPtr)CALL_DATAOBJINP_CHAROUT
+        (funcPtr)CALL_GET_RESOURCE_INFO_FOR_OPERATION
     }
     // clang-format on
 }; // _api_table_inp

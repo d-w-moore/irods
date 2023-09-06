@@ -15,6 +15,9 @@
 int rs_get_resource_info_for_operation(rsComm_t* _rsComm, dataObjInp_t* _dataObjInp, char** _out_info)
 {
     using log_api = irods::experimental::log::api;
+    if (_rsComm == nullptr || _dataObjInp == nullptr || _out_info == nullptr) {
+        return SYS_INVALID_INPUT_PARAM;
+    }
     rodsServerHost_t* rodsServerHost = nullptr;
     const int remoteFlag = getAndConnRemoteZone(_rsComm, _dataObjInp, &rodsServerHost, REMOTE_OPEN);
     if (remoteFlag < 0) {
