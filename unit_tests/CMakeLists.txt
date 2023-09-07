@@ -41,6 +41,7 @@ set(
   delay_hints_parser
   dns_cache
   dstream
+  resource_info
   environment_variables
   file_object
   filesystem
